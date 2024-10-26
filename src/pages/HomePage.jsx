@@ -1,0 +1,53 @@
+import { toast } from 'sonner'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import path_img from '../assets/images/banner_home.svg'
+
+const HomePage = () => {
+	const navigate = useNavigate()
+	const [identificacion, setIdentificacion] = useState('')
+
+	const handleConsultar = () => {
+		if (identificacion) {
+			localStorage.setItem('identificacion', identificacion)
+			navigate(`/consultar-corte`)
+		} else {
+			toast.error('Por favor, ingrese tu cédula.')
+		}
+	}
+
+	return (
+		<section className='text-slate-700 body-font'>
+			<div className='container mx-auto flex md:flex-row flex-col items-center'>
+				<div className='lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center'>
+					<h1 className='title-font sm:text-4xl text-3xl mb-4 font-medium text-slate-700'>Cortes de Luz en Ecuador</h1>
+
+					<p className='mb-8 leading-relaxed'>
+						Mantente al tanto sobre los cortes de luz programados y emergentes en tu zona.
+					</p>
+
+					<div className='flex justify-center items-center gap-4'>
+						<input
+							type='text'
+							value={identificacion}
+							onChange={e => setIdentificacion(e.target.value)}
+							placeholder='Ingresa tu cédula'
+							className='px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500'
+						/>
+						<button
+							onClick={handleConsultar}
+							className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded text-lg'>
+							Consultar
+						</button>
+					</div>
+				</div>
+
+				<div className='lg:max-w-lg lg:w-full md:w-1/2 w-5/6'>
+					<img className='object-cover object-center rounded' alt='Cortes de Luz' src={path_img} />
+				</div>
+			</div>
+		</section>
+	)
+}
+
+export default HomePage
