@@ -1,13 +1,15 @@
 {
-	"name": "cne-notificaciones",
+	"name": "cnelep-cortes",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
-		"lint": "eslint .",
-		"preview": "vite preview"
+		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+		"preview": "vite preview",
+		"lint:fix": "eslint 'src/**/*.{js,jsx}' --fix",
+		"format": "prettier --write 'src/**/*.{js,jsx,css,scss,md}'"
 	},
 	"dependencies": {
 		"axios": "^1.7.7",
@@ -23,6 +25,7 @@
 		"@eslint/js": "^9.13.0",
 		"@types/react": "^18.3.11",
 		"@types/react-dom": "^18.3.1",
+		"@vitejs/plugin-react": "^4.3.3",
 		"@vitejs/plugin-react-swc": "^3.5.0",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.13.0",
