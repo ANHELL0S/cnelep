@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { isValidCI } from '../utils/cli.validator'
 import path_img from '../assets/images/banner_home.svg'
@@ -7,6 +7,15 @@ import path_img from '../assets/images/banner_home.svg'
 const HomePage = () => {
 	const navigate = useNavigate()
 	const [identificacion, setIdentificacion] = useState('')
+	const [hasIdentificacion, setHasIdentificacion] = useState(false)
+
+	useEffect(() => {
+		const storedIdentificacion = localStorage.getItem('identificacion')
+		if (storedIdentificacion) {
+			setIdentificacion(storedIdentificacion)
+			setHasIdentificacion(true)
+		}
+	}, [])
 
 	const handleConsultar = () => {
 		if (!identificacion) {
@@ -32,20 +41,28 @@ const HomePage = () => {
 						cédula asociado a tu planilla de luz.
 					</p>
 
-					<div className='flex justify-center items-center gap-4 text-sm'>
-						<input
-							type='text'
-							value={identificacion}
-							onChange={e => setIdentificacion(e.target.value)}
-							placeholder='Ingresa tu cédula'
-							className='px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500'
-						/>
-						<button
-							onClick={handleConsultar}
+					{hasIdentificacion ? (
+						<a
+							href='/consultar-corte'
 							className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
-							Consultar
-						</button>
-					</div>
+							Mostar mi horario de corte
+						</a>
+					) : (
+						<div className='flex justify-center items-center gap-4 text-sm'>
+							<input
+								type='text'
+								value={identificacion}
+								onChange={e => setIdentificacion(e.target.value)}
+								placeholder='Ingresa tu cédula'
+								className='px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500'
+							/>
+							<button
+								onClick={handleConsultar}
+								className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
+								Consultar mi horario
+							</button>
+						</div>
+					)}
 				</div>
 
 				<div className='lg:max-w-lg lg:w-full md:w-1/2 w-5/6'>
