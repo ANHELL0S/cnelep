@@ -1,6 +1,6 @@
 const AboutPage = () => {
 	return (
-		<div className='text-slate-600 text-base sm:text-lg'>
+		<div className='text-slate-600 text-sm'>
 			<h1 className='font-bold mb-4'>Sobre Nosotros</h1>
 			<p className='mb-4'>
 				Somos una plataforma diseñada para ofrecer información clara y precisa sobre los cortes de luz en Ecuador,
@@ -34,8 +34,12 @@ const AboutPage = () => {
 			<h2 className=' font-semibold mb-2'>Contacto</h2>
 			<p className='mb-4'>
 				Si tienes alguna pregunta o necesitas más información sobre nuestra plataforma y cómo utilizarla, no dudes en{' '}
-				<a href='/contacto' className='text-blue-600 underline'>
-					contactarnos
+				<a
+					href='https://wa.me/593982718318'
+					target='_blank'
+					rel='noopener noreferrer'
+					className='ml-1 text-blue-600 underline transition-colors duration-200 hover:text-blue-500'>
+					soporte
 				</a>
 				. Estamos aquí para ayudarte a mantenerte informado sobre el servicio eléctrico en Ecuador.
 			</p>

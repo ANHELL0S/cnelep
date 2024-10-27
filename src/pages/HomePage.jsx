@@ -1,6 +1,7 @@
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { isValidCI } from '../utils/cli.validator'
 import path_img from '../assets/images/banner_home.svg'
 
 const HomePage = () => {
@@ -8,25 +9,30 @@ const HomePage = () => {
 	const [identificacion, setIdentificacion] = useState('')
 
 	const handleConsultar = () => {
-		if (identificacion) {
+		if (!identificacion) {
+			toast.error('Por favor, ingrese tu cédula')
+		} else if (!isValidCI(identificacion)) {
+			toast.error('La cédula ingresada no es válida')
+		} else {
 			localStorage.setItem('identificacion', identificacion)
 			navigate(`/consultar-corte`)
-		} else {
-			toast.error('Por favor, ingrese tu cédula.')
 		}
 	}
 
 	return (
-		<section className='text-slate-700 body-font'>
+		<section className='text-slate-700'>
 			<div className='container mx-auto flex md:flex-row flex-col items-center'>
 				<div className='lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center'>
-					<h1 className='title-font sm:text-4xl text-3xl mb-4 font-medium text-slate-700'>Cortes de Luz en Ecuador</h1>
+					<h1 className='title-font sm:text-4xl text-3xl mb-4 font-semibold text-slate-600'>
+						Consulta tu horario de corte de luz
+					</h1>
 
-					<p className='mb-8 leading-relaxed'>
-						Mantente al tanto sobre los cortes de luz programados y emergentes en tu zona.
+					<p className='mb-8 leading-relaxed text-sm text-slate-500 font-medium'>
+						Mantente al tanto sobre los cortes de luz programados y emergentes en tu zona. Solo ingresa el número de
+						cédula asociado a tu planilla de luz.
 					</p>
 
-					<div className='flex justify-center items-center gap-4'>
+					<div className='flex justify-center items-center gap-4 text-sm'>
 						<input
 							type='text'
 							value={identificacion}
@@ -36,7 +42,7 @@ const HomePage = () => {
 						/>
 						<button
 							onClick={handleConsultar}
-							className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded text-lg'>
+							className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
 							Consultar
 						</button>
 					</div>

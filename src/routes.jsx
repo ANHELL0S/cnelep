@@ -1,5 +1,5 @@
-import HomePage from './pages/HomePage'
 import Layout from './layouts/Layout'
+import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
 import AboutPage from './pages/AboutPage'
 import { Routes, Route } from 'react-router-dom'

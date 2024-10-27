@@ -3,10 +3,10 @@ import { BiSolidHeart } from 'react-icons/bi'
 const Footer = () => {
 	return (
 		<footer className='text-slate-500 bg-white text-center'>
-			<div className='flex flex-col gap-4 items-center justify-between sm:flex-row sm:py-0'>
+			<div className='flex flex-col gap-2 items-center justify-between sm:flex-row sm:py-0'>
 				<div className='flex flex-col gap-2 text-center sm:flex-row sm:gap-8 sm:text-left'>
 					<span className='block text-xs font-medium'>
-						&copy; {new Date().getFullYear()} PUI - Consulta cortes de luz. Todos los derechos reservados.
+						&copy; {new Date().getFullYear()} PUI. Todos los derechos reservados.
 					</span>
 				</div>
 

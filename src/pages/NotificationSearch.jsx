@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useState, useEffect } from 'react'
+import { isValidCI } from '../utils/cli.validator'
+import { Error500 } from '../components/molecules/banner/Error_500'
+import { SpinnerLoading } from '../components/molecules/loaders/SpinnerLoading'
 import { LuAlignCenterVertical, LuCalendar, LuCheckCircle, LuLocate } from 'react-icons/lu'
 
 const NotificationSearch = () => {
@@ -8,12 +11,20 @@ const NotificationSearch = () => {
 	const [loading, setLoading] = useState(false)
 	const [identificacion, setIdentificacion] = useState('')
 	const [notificaciones, setNotificaciones] = useState([])
+	const existStoredIdentificacion = localStorage.getItem('identificacion')
 
 	useEffect(() => {
 		const storedIdentificacion = localStorage.getItem('identificacion')
 		if (storedIdentificacion) {
-			setIdentificacion(storedIdentificacion)
-			fetchNotification(storedIdentificacion)
+			if (isValidCI(storedIdentificacion)) {
+				setIdentificacion(storedIdentificacion)
+				fetchNotification(storedIdentificacion)
+			} else {
+				localStorage.removeItem('identificacion')
+				setIdentificacion('')
+				setNotificaciones([])
+				setError('Cédula inválida, por favor ingrese una válida.')
+			}
 		}
 	}, [])
 
@@ -37,11 +48,11 @@ const NotificationSearch = () => {
 	}
 
 	const handleConsultar = () => {
-		if (identificacion) {
+		if (isValidCI(identificacion)) {
 			localStorage.setItem('identificacion', identificacion)
 			fetchNotification(identificacion)
 		} else {
-			toast.error('Por favor, ingrese una cédula.')
+			toast.error('Por favor, ingrese una cédula válida.')
 		}
 	}
 
@@ -65,30 +76,53 @@ const NotificationSearch = () => {
 
 	return (
 		<div>
-			{notificaciones.length === 0 ? (
-				<div className='flex flex-col items-center w-full'>
-					<div className='flex items-center justify-center flex-col'>
-						<label htmlFor='identificacion' className='mb-2 font-medium text-slate-700 text-center'>
-							Ingrese Cédula:
-						</label>
-						<input
-							id='identificacion'
-							type='text'
-							value={identificacion}
-							onChange={e => setIdentificacion(e.target.value)}
-							className='px-4 py-2 border border-slate-300 text-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 w-full mb-4'
-						/>
-						<button
-							onClick={handleConsultar}
-							className='px-6 py-2 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition duration-200 w-full'
-							disabled={loading}>
-							{loading ? 'Cargando...' : 'Consultar'}
-						</button>
+			{loading && (
+				<div className='flex py-48 items-center justify-center'>
+					<SpinnerLoading text='Cargando, espera un momento :)' />
+				</div>
+			)}
+
+			{!existStoredIdentificacion ? (
+				<div className='container mx-auto flex md:flex-row flex-col items-center justify-center min-h-screen'>
+					<div className='lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center'>
+						<h1 className='title-font sm:text-4xl text-3xl mb-4 font-semibold text-slate-600'>
+							Consulta tu horario de corte de luz
+						</h1>
+						<p className='mb-8 leading-relaxed text-sm text-slate-500 font-medium'>
+							Mantente al tanto sobre los cortes de luz programados y emergentes en tu zona. Solo ingresa el número de
+							cédula asociado a tu planilla de luz.
+						</p>
+					</div>
+
+					<div className='lg:max-w-lg lg:w-full md:w-1/2 w-5/6'>
+						<div className='flex justify-center items-center gap-4 text-sm'>
+							<div className='flex flex-col text-slate-600 items-start'>
+								<label htmlFor='identificacion' className='mb-2 font-medium text-slate-600 text-center'>
+									Número de cédula:
+								</label>
+								<input
+									id='identificacion'
+									type='text'
+									value={identificacion}
+									placeholder='Ingresa tu cédula'
+									onChange={e => setIdentificacion(e.target.value)}
+									className='px-4 py-2 border border-slate-300 text-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 w-full mb-4'
+								/>
+							</div>
+
+							<div className='pt-3'>
+								<button
+									onClick={handleConsultar}
+									className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
+									Consultar
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			) : null}
 
-			{error && <p className='text-red-500 text-center'>{error}</p>}
+			{error && Error500}
 
 			{notificaciones.length > 0 &&
 				notificaciones.map((notificacion, index) => (
