@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { isValidCI } from '../utils/cli.validator'
 import path_img from '../assets/images/banner_home.svg'
 
@@ -42,11 +42,11 @@ const HomePage = () => {
 					</p>
 
 					{hasIdentificacion ? (
-						<a
-							href='/consultar-corte'
-							className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
-							Mostar mi horario de corte
-						</a>
+						<Link to='/consultar-corte'>
+							<button className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
+								Mostar mi horario de corte
+							</button>
+						</Link>
 					) : (
 						<div className='flex justify-center items-center gap-4 text-sm'>
 							<input
