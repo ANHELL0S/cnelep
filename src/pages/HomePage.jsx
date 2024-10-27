@@ -42,7 +42,7 @@ const HomePage = () => {
 					</p>
 
 					{hasIdentificacion ? (
-						<Link to='/consultar-corte'>
+						<Link to='/#/consultar-corte'>
 							<button className='inline-flex text-white bg-slate-500 border-0 py-2 px-4 focus:outline-none hover:bg-slate-600 rounded'>
 								Mostar mi horario de corte
 							</button>
