@@ -130,14 +130,22 @@ const NotificationSearch = () => {
 			{error && <Error500 />}
 
 			{!hasNotifications && (
-				<div className='p-4 text-center text-slate-600 py-40 font-medium text-lg'>
-					No hay cortes programados en tu zona suertud@.
+				<div className='flex flex-col items-center gap-4'>
+					<div className='p-4 text-center text-slate-600 pt-36 font-medium text-lg'>
+						No hay cortes programados en tu zona suertud@.
+					</div>
+
+					<button
+						onClick={handleNewIdentification}
+						className='mb-4 px-4 py-2 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition duration-200'>
+						Nueva consulta
+					</button>
 				</div>
 			)}
 
 			{notificaciones.length > 0 &&
 				notificaciones.map((notificacion, index) => (
-					<div key={index} className='bg-white w-full sm:flex-row flex-col gap-14 flex items-center justify-center'>
+					<div key={index} className='bg-white w-full sm:flex-row flex-col gap-14 md:flex items-center justify-center'>
 						<div className='flex flex-col gap-4'>
 							<div className='flex gap-4 flex-col'>
 								<h2 className='text-xl font-semibold text-slate-700'>Cuenta: {notificacion.cuentaContrato}</h2>
@@ -177,7 +185,7 @@ const NotificationSearch = () => {
 												<span>{date}</span>
 											</div>
 
-											<div className='flex flex-col gap-2 text-slate-600/90 text-xs'>
+											<div className='flex flex-col gap-2 text-slate-600/90 md:text-sm text-sm'>
 												{detalles.map((detalle, idx) => (
 													<div key={idx} className='flex gap-2'>
 														<h3 className='font-semibold'>{idx + 1} corte: </h3>
