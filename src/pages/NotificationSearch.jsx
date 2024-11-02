@@ -11,6 +11,7 @@ const NotificationSearch = () => {
 	const [loading, setLoading] = useState(false)
 	const [identificacion, setIdentificacion] = useState('')
 	const [notificaciones, setNotificaciones] = useState([])
+	const [hasNotifications, setHasNotifications] = useState(true) // New state variable
 	const existStoredIdentificacion = localStorage.getItem('identificacion')
 
 	useEffect(() => {
@@ -31,15 +32,18 @@ const NotificationSearch = () => {
 	const fetchNotification = async id => {
 		setLoading(true)
 		setError('')
+		setHasNotifications(true) // Reset state before fetching
 		try {
 			const response = await axios.get(
 				`https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/${id}/IDENTIFICACION`
 			)
 			const data = response.data
-			if (data.resp === 'OK' && data.notificaciones) {
+			if (data.resp === 'OK' && data.notificaciones && data.notificaciones.length > 0) {
 				setNotificaciones(data.notificaciones)
+				setHasNotifications(true) // Set to true if there are notifications
 			} else {
-				toast.warning('No se encontraron notificaciones para esta identificación.')
+				//toast.warning('No se encontraron notificaciones para esta identificación.')
+				setHasNotifications(false) // Set to false if no notifications
 			}
 		} catch (err) {
 			setError('Error al obtener los datos.')
@@ -61,6 +65,7 @@ const NotificationSearch = () => {
 		setIdentificacion('')
 		setNotificaciones([])
 		setError('')
+		setHasNotifications(true) // Reset notification state
 	}
 
 	const groupByDate = detalles => {
@@ -77,13 +82,13 @@ const NotificationSearch = () => {
 	return (
 		<div>
 			{loading && (
-				<div className='flex py-48 items-center justify-center'>
+				<div className='flex items-center justify-center'>
 					<SpinnerLoading text='Cargando, espera un momento :)' />
 				</div>
 			)}
 
 			{!existStoredIdentificacion ? (
-				<div className='container mx-auto flex md:flex-row flex-col items-center justify-center min-h-screen'>
+				<div className='container mx-auto flex md:flex-row flex-col items-center justify-center pt-36'>
 					<div className='lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center'>
 						<h1 className='title-font sm:text-4xl text-3xl mb-4 font-semibold text-slate-600'>
 							Consulta tu horario de corte de luz
@@ -122,7 +127,13 @@ const NotificationSearch = () => {
 				</div>
 			) : null}
 
-			{error && Error500}
+			{error && <Error500 />}
+
+			{!hasNotifications && (
+				<div className='p-4 text-center text-slate-600 py-40 font-medium text-lg'>
+					No hay cortes programados en tu zona suertud@.
+				</div>
+			)}
 
 			{notificaciones.length > 0 &&
 				notificaciones.map((notificacion, index) => (
@@ -166,7 +177,7 @@ const NotificationSearch = () => {
 												<span>{date}</span>
 											</div>
 
-											<div className='flex flex-col gap-2 text-slate-600/90'>
+											<div className='flex flex-col gap-2 text-slate-600/90 text-xs'>
 												{detalles.map((detalle, idx) => (
 													<div key={idx} className='flex gap-2'>
 														<h3 className='font-semibold'>{idx + 1} corte: </h3>
